@@ -17,20 +17,20 @@ int is_sorted(int *array, size_t n) {
 
 void generate_array(int *array, size_t n, int type) {
     switch (type) {
-        case 0: 
+        case 0: // Випадкові дані
             for (size_t i = 0; i < n; i++) array[i] = rand() % n;
             break;
-        case 1: 
+        case 1: // Відсортовано
             for (size_t i = 0; i < n; i++) array[i] = i;
             break;
-        case 2: 
+        case 2: // Зворотньо відсортовано
             for (size_t i = 0; i < n; i++) array[i] = n - i;
             break;
-        case 3: 
+        case 3: // "Органна труба"
             for (size_t i = 0; i < n/2; i++) array[i] = i;
             for (size_t i = n/2; i < n; i++) array[i] = n - i;
             break;
-        case 4: 
+        case 4: // Медіанний "убивця"
             for (size_t i = 0; i < n/2; i++) {
                 array[2*i] = i;
                 array[2*i+1] = n - i;
@@ -41,14 +41,25 @@ void generate_array(int *array, size_t n, int type) {
 }
 
 void test_correctness() {
-    int tests[][20] = {{0}, {1}, {2,1}, {1,2}, {5,5,5}, 
-                      {1,2,3,4,5}, {5,4,3,2,1}, {3,1,4,2,5}};
+    int tests[][20] = {
+        {0},       // Тест 1: 0 елементів
+        {1},       // Тест 2: 1 елемент
+        {2,1},     // Тест 3: 2 елементи (не відсортовані)
+        {1,2},     // Тест 4: 2 елементи (відсортовані)
+        {5,5,5},   // Тест 5: однакові елементи
+        {1,2,3,4,5}, // Тест 6: відсортований масив
+        {5,4,3,2,1}, // Тест 7: зворотньо відсортований
+        {3,1,4,2,5}  // Тест 8: випадковий порядок
+    };
     int sizes[] = {0,1,2,2,3,5,5,5};
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < sizeof(sizes)/sizeof(int); i++) {
         qsort(tests[i], sizes[i], sizeof(int), int_compare);
-        printf("Test %d: %s\n", i+1, 
-               is_sorted(tests[i], sizes[i]) ? "PASSED" : "FAILED");
+        if (is_sorted(tests[i], sizes[i])) {
+            printf("Тест %d: PASSED\n", i+1);
+        } else {
+            printf("Тест %d: FAILED\n", i+1);
+        }
     }
 }
 
@@ -62,16 +73,16 @@ void test_performance(int type) {
     clock_t end = clock();
 
     double time = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Type %d: %.3f seconds\n", type, time);
+    printf("Тип %d: %.3f секунд\n", type, time);
     free(array);
 }
 
 int main() {
     srand(time(NULL));
-    printf("=== Correctness Tests ===\n");
+    printf("=== Коректність ===\n");
     test_correctness();
 
-    printf("\n=== Performance (n=10,000,000) ===\n");
+    printf("\n=== Продуктивність (n=10,000,000) ===\n");
     for (int i = 0; i <= 4; i++) {
         test_performance(i);
     }
