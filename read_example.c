@@ -31,7 +31,7 @@ int main() {
         return 1;
     }
 
-    printf("Buffer: %d, %d, %d, %d\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+    printf("Буфер: %d, %d, %d, %d\n", buffer[0], buffer[1], buffer[2], buffer[3]);
     close(fd);
     return 0;
 }
