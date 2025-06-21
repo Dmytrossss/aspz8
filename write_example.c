@@ -23,7 +23,7 @@ int main() {
     }
 
     size_t nbytes = 1000000;
-    char *buffer = malloc(nbytes);
+    char *buffer = (char *)malloc(nbytes);
     if (!buffer) {
         perror("malloc");
         exit(1);
@@ -33,9 +33,9 @@ int main() {
     ssize_t count = write(pipefd[1], buffer, nbytes);
     if (count < 0) {
         perror("write");
-        printf("Error: %s\n", strerror(errno));
+        printf("Помилка: %s\n", strerror(errno));
     } else {
-        printf("Written: %zd of %zu bytes\n", count, nbytes);
+        printf("Записано: %zd з %zu байт\n", count, nbytes);
     }
 
     close(pipefd[0]);
